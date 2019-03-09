@@ -8,6 +8,9 @@ import com.theta360.pluginlibrary.activity.PluginActivity;
 import com.theta360.pluginlibrary.callback.KeyCallback;
 import com.theta360.pluginlibrary.receiver.KeyReceiver;
 
+import org.theta4j.osc.CommandResponse;
+import org.theta4j.osc.CommandState;
+import org.theta4j.webapi.TakePicture;
 import org.theta4j.webapi.Theta;
 
 import java.io.IOException;
@@ -25,18 +28,28 @@ public class MainActivity extends PluginActivity {
             if (keyCode == KeyReceiver.KEYCODE_CAMERA) {
                 // use lambda expression with Java 1.8
                 executor.submit(() -> {
-
                     Log.d("THETA", "take picture");
-
+                    CommandResponse<TakePicture.Result> response = null;
                     try {
-                        theta.takePicture();
+                        response = theta.takePicture();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
+                    while (response.getState() != CommandState.DONE) {
+                        try {
+                            response = theta.commandStatus(response);
+                            Thread.sleep(100);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.d("THETA", "fileUrl: " + response.getResult().getFileUrl());
+
                 });
             }
-
         }
 
         @Override
