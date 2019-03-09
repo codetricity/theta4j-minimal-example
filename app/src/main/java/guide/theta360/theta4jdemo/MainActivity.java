@@ -8,48 +8,21 @@ import com.theta360.pluginlibrary.activity.PluginActivity;
 import com.theta360.pluginlibrary.callback.KeyCallback;
 import com.theta360.pluginlibrary.receiver.KeyReceiver;
 
+import org.theta4j.webapi.ISOSpeed;
 import org.theta4j.webapi.Theta;
+import org.theta4j.webapi.Options.*;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.theta4j.webapi.Options.ISO;
+
 public class MainActivity extends PluginActivity {
 
     final Theta theta = Theta.createForPlugin();
+    private ThetaButtonCallback keyCallback = new ThetaButtonCallback();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    private KeyCallback keyCallback = new KeyCallback() {
-        @Override
-        public void onKeyDown(int keyCode, KeyEvent keyEvent) {
-            if (keyCode == KeyReceiver.KEYCODE_CAMERA) {
-                // use lambda expression with Java 1.8
-                executor.submit(() -> {
-
-                    Log.d("THETA", "take picture");
-
-                    try {
-                        theta.takePicture();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                });
-            }
-
-        }
-
-        @Override
-        public void onKeyUp(int keyCode, KeyEvent keyEvent) {
-
-        }
-
-        @Override
-        public void onKeyLongPress(int keyCode, KeyEvent keyEvent) {
-
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +36,16 @@ public class MainActivity extends PluginActivity {
     protected void onResume() {
         super.onResume();
         setKeyCallback(keyCallback);
+
+        executor.submit(()-> {
+            try {
+                final ISOSpeed iso = theta.getOption(ISO);
+                System.out.println("ISO Speed: " + iso);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
 
         if (isApConnected()) {
 
