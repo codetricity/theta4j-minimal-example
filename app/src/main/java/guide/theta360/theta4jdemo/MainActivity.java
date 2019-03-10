@@ -10,6 +10,7 @@ import com.theta360.pluginlibrary.receiver.KeyReceiver;
 
 import org.theta4j.webapi.CaptureMode;
 import org.theta4j.webapi.ExposureCompensation;
+import org.theta4j.webapi.ExposureProgram;
 import org.theta4j.webapi.ISOSpeed;
 import org.theta4j.webapi.Theta;
 import org.theta4j.webapi.Options.*;
@@ -21,6 +22,7 @@ import java.util.concurrent.Executors;
 import static org.theta4j.webapi.ISOSpeed._200;
 import static org.theta4j.webapi.Options.CAPTURE_MODE;
 import static org.theta4j.webapi.Options.EXPOSURE_COMPENSATION;
+import static org.theta4j.webapi.Options.EXPOSURE_PROGRAM;
 import static org.theta4j.webapi.Options.ISO;
 
 public class MainActivity extends PluginActivity {
@@ -45,7 +47,7 @@ public class MainActivity extends PluginActivity {
 
         executor.submit(()-> {
             try {
-                theta.setOption(CAPTURE_MODE, CaptureMode.VIDEO);
+                theta.setOption(CAPTURE_MODE, CaptureMode.IMAGE);
                 CaptureMode captureMode = theta.getOption(CAPTURE_MODE);
                 Log.d(TAG, captureMode.toString());
 
@@ -53,14 +55,12 @@ public class MainActivity extends PluginActivity {
                 ExposureCompensation exposureCompensation = theta.getOption(EXPOSURE_COMPENSATION);
                 Log.d(TAG, exposureCompensation.toString());
 
-//                theta.setOption(ISO, _200);
-
-
-
-                ISOSpeed iso = theta.getOption(ISO);
-                String isoString = iso.toString();
-                Log.d(TAG, "ISO Speed: " + isoString);
-//                Log.d(TAG, "ISO Speed Changed: " + theta.getOption(ISO).toString());
+                // make sure CaptureMode is set to IMAGE
+                // https://developers.theta360.com/en/docs/v2.1/api_reference/options/exposure_program.html
+                
+                theta.setOption(EXPOSURE_PROGRAM, ExposureProgram.MANUAL);
+                theta.setOption(ISO, _200);
+                Log.d(TAG, "ISO Speed Changed: " + theta.getOption(ISO).toString());
 
             } catch (IOException e) {
                 e.printStackTrace();
