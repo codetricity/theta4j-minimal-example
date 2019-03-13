@@ -14,13 +14,23 @@ gradle build files and the AndroidManifest.xml for permissions.
 
 If you prefer Kotlin, Shiro has an [example](https://github.com/theta4j/theta-web-api/tree/master/plugin-example).
 
-## Response
+To keep the Master git branch simple, the demo is divided into 
+multiple branches. After you clone the repository, use `git branch -a`
+to see all the branches. Then checkout a branch with `git checkout options`.
+
+![git screenshot](images/git-screen.png)
+
+
+## HTTP Response from Camera
 The [response branch](https://github.com/codetricity/theta4j-minimal-example/tree/response) shows how to get the camera HTTP response from the WebAPI command. It shows how to receive the URI for the last picture taken.
 
-## Options
+## Get and Set Camera Options
 The [options branch](https://github.com/codetricity/theta4j-minimal-example/tree/options) shows to to get and set camera settings. ISO, exposure compensation, capture mode.
 
-
+## Audio and Visual Indicators of Camera Status
+The [indicators branch](https://github.com/codetricity/theta4j-minimal-example/tree/indicators)
+shows use of a camera beep and magenta LED to show the start of a 
+multi-picture loop.
 
 
 
