@@ -15,7 +15,6 @@ The main code snippet is shown below:
                 executorService.submit(() -> {
                     while (pictureCounter < maxPicture) {
                         try {
-                            Log.d(TAG, "take picture " + pictureCounter);
                             theta.takePicture();
                             Thread.sleep(4000);
                         } catch (InterruptedException e) {
@@ -25,7 +24,6 @@ The main code snippet is shown below:
                         }
                         pictureCounter = pictureCounter + 1;
                     }
-                    Log.d(TAG, "picture taking done");
                     notificationLedHide(LED3);
                     pictureCounter = 0;
                     notificationAudioSelf();
